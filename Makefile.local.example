@@ -1,0 +1,5 @@
+# Set them to fit your local environment
+CLASSPATH:=$(CLASSPATH):/opt/vertx/lib/vertx-core-2.1.5.jar
+CLASSPATH:=$(CLASSPATH):/opt/vertx/lib/vertx-platform-2.1.5.jar
+PROGUARD:=/opt/proguard/lib/proguard.jar
+RT:=/usr/lib/jvm/java-default-runtime/jre/lib/rt.jar

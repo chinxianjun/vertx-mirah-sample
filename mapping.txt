@@ -1,0 +1,4 @@
+sample.SampleVerticle -> sample.SampleVerticle:
+    void start() -> start
+sample.handler.RootHandler -> sample.a.a:
+    void handle(java.lang.Object) -> handle
