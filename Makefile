@@ -14,15 +14,18 @@ endif
 
 CLASSDIR=$(BUILDDIR)/classes
 CLASSPATH:=$(CLASSPATH):$(CLASSDIR)
-SRCS=$(shell find $(SRCDIR) -name *.mirah)
-OBJS=$(patsubst $(SRCDIR)%,$(CLASSDIR)%,$(patsubst %.mirah,%.class,$(SRCS)))
+MSRCS=$(shell find $(SRCDIR) -name *.mirah)
+JSRCS=$(shell find $(SRCDIR) -name *.java)
+MOBJS=$(patsubst $(SRCDIR)%,$(CLASSDIR)%,$(patsubst %.mirah,%.class,$(MSRCS)))
+JOBJS=$(patsubst $(SRCDIR)%,$(CLASSDIR)%,$(patsubst %.java,%.class,$(JSRCS)))
 TARGET:=$(BUILDDIR)/$(NAME)-$(VERSION).zip
 ORIGINTARGET:=$(BUILDDIR)/$(NAME)-$(VERSION)-origin.zip
 
 vpath %.mirah $(SRCDIR)
+vpath %.java $(SRCDIR)
 vpath %.class $(BUILDDIR)
 
-all: check | $(OBJS)
+all: check | $(JOBJS) $(MOBJS)
 
 mod: check | $(TARGET)
 
@@ -47,12 +50,15 @@ proguard: $(ORIGINTARGET)
 
 $(TARGET): proguard
 
-$(ORIGINTARGET):$(OBJS) $(ETCDIR)/mod.json
-	cp $(ETCDIR)/mod.json $(BUILDDIR)/classes/
-	jar cvf $(ORIGINTARGET) -C $(BUILDDIR)/classes/ .
+$(ORIGINTARGET):$(JOBJS) $(MOBJS) $(ETCDIR)/mod.json
+	cp $(ETCDIR)/mod.json $(CLASSDIR)
+	jar cvf $(ORIGINTARGET) -C $(CLASSDIR) .
 
-$(OBJS): $(SRCS) | prebuild
-	mirahc --cp $(CLASSPATH) --new-closures --dest build/classes $(SRCS)
+$(JOBJS): $(JSRCS) | prebuild
+	javac -cp $(CLASSPATH) -d $(CLASSDIR) $(JSRCS)
+
+$(MOBJS): $(MSRCS) | prebuild
+	mirahc --cp $(CLASSPATH) --new-closures --dest $(CLASSDIR) $(MSRCS)
 
 clean:
 	rm -rf $(BUILDDIR)

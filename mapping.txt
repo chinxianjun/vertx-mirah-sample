@@ -1,4 +1,7 @@
 sample.SampleVerticle -> sample.SampleVerticle:
     void start() -> start
-sample.handler.RootHandler -> sample.a.a:
+sample.handler.RequestHandler -> sample.a.a:
+    void handle(org.vertx.java.core.http.HttpServerRequest) -> a
     void handle(java.lang.Object) -> handle
+sample.handler.RootHandler -> sample.a.b:
+    void handle(org.vertx.java.core.http.HttpServerRequest) -> a

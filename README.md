@@ -26,3 +26,9 @@ Make module
 Execute `make mod` to make the zip mod file, and check the result in
 build dir. NAME-VERSION.zip is a proguarded zip mod, and
 NAME-VERSION-origin.zip is unproguarded one.
+
+Note
+----
+
+Don't call mirah in java source, because we compile java source code
+first, then mirah source code.
